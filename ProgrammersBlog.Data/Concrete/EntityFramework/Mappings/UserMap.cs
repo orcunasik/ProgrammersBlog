@@ -35,6 +35,25 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
 
             builder.HasOne<Role>(u => u.Role).WithMany(r => r.Users).HasForeignKey(u => u.RoleId);
             builder.ToTable("Users");
+            builder.HasData(new User
+            {
+                Id = 1,
+                RoleId = 1,
+                FirstName = "Orçun",
+                LastName = "Aşık",
+                Description = "İlk Admin Kullanıcısı",
+                Email = "asikorcun@gmail.com",
+                UserName = "orcun91",
+                Picture = "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
+                IsActive = true,
+                IsDeleted = false,
+                CreatedByName = "InitialCreate",
+                CreatedDate = DateTime.Now,
+                ModifiedByName = "InitialCreate",
+                ModifiedDate = DateTime.Now,
+                Note = "Kullanıcı Admin Rolüne sahiptir",
+                PasswordHash = Encoding.ASCII.GetBytes("0192023a7bbd73250516f069df18b500")
+            });
         }
     }
 }
