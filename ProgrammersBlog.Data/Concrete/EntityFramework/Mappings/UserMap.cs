@@ -44,7 +44,7 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
                 Description = "İlk Admin Kullanıcısı",
                 Email = "asikorcun@gmail.com",
                 UserName = "orcun91",
-                Picture = "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
+                Picture = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSX4wVGjMQ37PaO4PdUVEAliSLi8-c2gJ1zvQ&usqp=CAU",
                 IsActive = true,
                 IsDeleted = false,
                 CreatedByName = "InitialCreate",
