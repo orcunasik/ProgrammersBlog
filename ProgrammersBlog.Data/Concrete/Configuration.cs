@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Data.Concrete
 {
-    static class Configuration
+    public static class Configuration
     {
         static public string ConnectionString 
         {
