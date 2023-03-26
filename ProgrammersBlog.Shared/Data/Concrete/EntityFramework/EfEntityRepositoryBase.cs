@@ -1,13 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using ProgrammersBlog.Shared.Data.Abstract;
 using ProgrammersBlog.Shared.Entities.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
 {
@@ -20,9 +14,10 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
             _context = context;
         }
 
-        public async Task AddAsync(TEntity entity)
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
             await _context.Set<TEntity>().AddAsync(entity);
+            return entity;
         }
 
         public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
@@ -74,9 +69,10 @@ namespace ProgrammersBlog.Shared.Data.Concrete.EntityFramework
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
             await Task.Run(() => { _context.Set<TEntity>().Update(entity); });
+            return entity;
         }
     }
 }
