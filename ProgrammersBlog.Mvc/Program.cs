@@ -1,9 +1,15 @@
 using ProgrammersBlog.Services.AutoMapper.Profiles;
 using ProgrammersBlog.Services.Extensions;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews()
-                .AddRazorRuntimeCompilation();
+                .AddRazorRuntimeCompilation()
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                });
 builder.Services.LoadMyServices();
 builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
 var app = builder.Build();
