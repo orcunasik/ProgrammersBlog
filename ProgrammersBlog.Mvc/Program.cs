@@ -1,5 +1,8 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using ProgrammersBlog.Services.AutoMapper.Profiles;
 using ProgrammersBlog.Services.Extensions;
+using ProgrammersBlog.Services.Validations;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,9 @@ builder.Services.AddControllersWithViews()
                 });
 builder.Services.LoadMyServices();
 builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
+builder.Services.AddValidatorsFromAssembly(typeof(CategoryAddDtoValidator).Assembly)
+                .AddFluentValidationAutoValidation();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
