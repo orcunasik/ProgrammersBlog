@@ -17,6 +17,9 @@
              Kategoriler
     </div>
     <div class="card-body">
+        <div class="spinner-border" role="status" style="display:none;">
+            <span class="sr-only">Yükleniyor...</span>
+        </div>
           <div class="table-responsive">
                 <table class="table table-bordered" id="categoriesTable" width="100%" cellspacing="0">
                     <thead>
@@ -102,7 +105,50 @@
                         text: 'Yenile',
                         className: 'btn btn-info',
                         action: function (e, dt, node, config) {
-                            alert('Yenile Butonuna Basıldı');
+                            $.ajax({
+                                type:'GET',
+                                url: '@Url.Action("GetAllCategories","Categories")',
+                                contentType:"application/json",
+                                beforeSend:function(){
+                                    $('#categoriesTable').hide();
+                                    $('.spinner-border').show();
+                                },
+                                success:function(data){
+                                    const categoryListDto = jQuery.parseJSON(data);
+                                    console.log(categoryListDto);
+                                    if(categoryListDto.ResultStatus === 0)
+                                    {
+                                        let tableBody = "";
+                                        $.each(categoryListDto.Categories.$values,
+                                            function(index,category){
+                                                tableBody += `
+                                                <tr>
+                                                    <td>${category.Id}</td>
+                                                    <td>${category.Name}</td>
+                                                    <td>${category.Description}</td>
+                                                    <td>${convertFirstLetterToUpperCase(category.IsActive.toString())}</td>
+                                                    <td>${convertFirstLetterToUpperCase(category.IsDeleted.toString())}</td>
+                                                    <td>${category.Note}</td>
+                                                    <td>${convertToShortDate(category.CreatedDate)}</td>
+                                                    <td>${category.CreatedByName}</td>
+                                                    <td>${convertToShortDate(category.ModifiedDate)}</td>
+                                                    <td>${category.ModifiedByName}</td>
+                                                </tr>`;
+                                        });
+                                        $('#categoriesTable > tbody').replaceWith(tableBody);
+                                        $('.spinner-border').hide();
+                                        $('#categoriesTable').fadeIn(1400);
+                                    }
+                                    else
+                                    {
+                                        toastr.error(`${categoryListDto.Message}`, 'İşlem Başarısız!');
+                                    }
+                                },
+                                error:function(err){
+                                    console.log(err);
+                                    toastr.error(`${err.statusText}`, 'İşlem Başarısız!');
+                                }
+                            });
                         }
                     }
                 ],
@@ -386,13 +432,12 @@
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.Id}</td>
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.Name}</td>
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.Description}</td>
-                                            <td>${categoryAddAjaxModel.CategoryDto.Category.IsActive}</td>
-                                            <td>${categoryAddAjaxModel.CategoryDto.Category.IsDeleted}</td>
-                                            <td>${categoryAddAjaxModel.CategoryDto.Category.IsDeleted}</td>
+                                            <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsActive.toString())}</td>
+                                            <td>${convertFirstLetterToUpperCase(categoryAddAjaxModel.CategoryDto.Category.IsDeleted.toString())}</td>
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.Note}</td>
-                                            <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedDate}</td>
+                                            <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.CreatedDate)}</td>
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.CreatedByName}</td>
-                                            <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedDate}</td>
+                                            <td>${convertToShortDate(categoryAddAjaxModel.CategoryDto.Category.ModifiedDate)}</td>
                                             <td>${categoryAddAjaxModel.CategoryDto.Category.ModifiedByName}</td>
                                       </tr>`;
                                       const newTableRowObject = $(newTableRow);
@@ -400,6 +445,15 @@
                                       $('#categoriesTable').append(newTableRowObject);
                                       newTableRowObject.fadeIn(3500);
                                       toastr.success(`${categoryAddAjaxModel.CategoryDto.Message}`, 'Başarılı İşlem!');
+                                  }
+                                  else
+                                  {
+                                      let summaryText = "";
+                                      $('#validation-summary > ul > li').each(function(){
+                                          let text = $(this).text();
+                                          summaryText = `*${text}\n`;
+                                      });
+                                      toastr.warning(summaryText);
                                   }
                             });
                     });
