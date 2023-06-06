@@ -26,47 +26,47 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
 
             builder.HasOne<Article>(c => c.Article).WithMany(a => a.Comments).HasForeignKey(c => c.ArticleId);
             builder.ToTable("Comments");
-            builder.HasData(
-                new Comment
-                {
-                    Id = 1,
-                    ArticleId = 1,
-                    Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "C# Makalesine ilk yorum"
-                },
-                new Comment
-                {
-                    Id = 2,
-                    ArticleId = 2,
-                    Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "Angular Makalesine ilk yorum"
-                },
-                new Comment
-                {
-                    Id = 3,
-                    ArticleId = 3,
-                    Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
-                    IsActive = true,
-                    IsDeleted = false,
-                    CreatedByName = "InitialCreate",
-                    CreatedDate = DateTime.Now,
-                    ModifiedByName = "InitialCreate",
-                    ModifiedDate = DateTime.Now,
-                    Note = "Javascript Makalesine ilk yorum"
-                }
-                );
+            //builder.HasData(
+            //    new Comment
+            //    {
+            //        Id = 1,
+            //        ArticleId = 1,
+            //        Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "C# Makalesine ilk yorum"
+            //    },
+            //    new Comment
+            //    {
+            //        Id = 2,
+            //        ArticleId = 2,
+            //        Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "Angular Makalesine ilk yorum"
+            //    },
+            //    new Comment
+            //    {
+            //        Id = 3,
+            //        ArticleId = 3,
+            //        Text = "Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır.Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir.",
+            //        IsActive = true,
+            //        IsDeleted = false,
+            //        CreatedByName = "InitialCreate",
+            //        CreatedDate = DateTime.Now,
+            //        ModifiedByName = "InitialCreate",
+            //        ModifiedDate = DateTime.Now,
+            //        Note = "Javascript Makalesine ilk yorum"
+            //    }
+            //    );
         }
     }
 }
