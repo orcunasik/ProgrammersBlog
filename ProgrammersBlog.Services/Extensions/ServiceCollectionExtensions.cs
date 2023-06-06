@@ -17,7 +17,20 @@ namespace ProgrammersBlog.Services.Extensions
             {
                 x.UseSqlServer(Configuration.ConnectionString);
             });
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<ProgrammersBlogContext>();
+            services.AddIdentity<User, Role>(options =>
+            {
+                //User Password Options
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequiredUniqueChars = 0;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                //User UserName and Email Options
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = true;
+            })
+                .AddEntityFrameworkStores<ProgrammersBlogContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IArticleService, ArticleService>();
