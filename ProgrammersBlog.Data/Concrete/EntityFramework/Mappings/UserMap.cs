@@ -24,9 +24,9 @@ namespace ProgrammersBlog.Data.Concrete.EntityFramework.Mappings
             builder.Property(u => u.Email).HasMaxLength(100);
             builder.Property(u => u.NormalizedEmail).HasMaxLength(100);
 
-            builder.HasMany<UserClaimMap>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
+            builder.HasMany<UserClaim>().WithOne().HasForeignKey(uc => uc.UserId).IsRequired();
             builder.HasMany<UserLogin>().WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
-            builder.HasMany<UserTokenMap>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
+            builder.HasMany<UserToken>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
             builder.HasMany<UserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
         }
     }
