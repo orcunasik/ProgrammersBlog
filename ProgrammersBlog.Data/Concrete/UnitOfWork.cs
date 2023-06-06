@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ProgrammersBlog.Data.Abstract;
+﻿using ProgrammersBlog.Data.Abstract;
 using ProgrammersBlog.Data.Concrete.EntityFramework.Contexts;
 using ProgrammersBlog.Data.Concrete.EntityFramework.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Data.Concrete
 {
@@ -16,8 +10,6 @@ namespace ProgrammersBlog.Data.Concrete
         private EfArticleRepository _articleRepository;
         private EfCategoryRepository _categoryRepository;
         private EfCommentRepository _commentRepository;
-        private EfRoleRepository _roleRepository;
-        private EfUserRepository _userRepository;
 
         public UnitOfWork(ProgrammersBlogContext context)
         {
@@ -29,10 +21,6 @@ namespace ProgrammersBlog.Data.Concrete
         public ICategoryRepository Categories => _categoryRepository ?? new EfCategoryRepository(_context);
 
         public ICommentRepository Comments => _commentRepository ?? new EfCommentRepository(_context);
-
-        public IRoleRepository Roles => _roleRepository ?? new EfRoleRepository(_context);
-
-        public IUserRepository Users => _userRepository ?? new EfUserRepository(_context);
 
         public async ValueTask DisposeAsync()
         {
