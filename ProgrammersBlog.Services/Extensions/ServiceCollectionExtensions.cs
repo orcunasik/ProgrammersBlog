@@ -3,14 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using ProgrammersBlog.Data.Abstract;
 using ProgrammersBlog.Data.Concrete;
 using ProgrammersBlog.Data.Concrete.EntityFramework.Contexts;
+using ProgrammersBlog.Entities.Concrete;
 using ProgrammersBlog.Services.Abstract;
 using ProgrammersBlog.Services.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProgrammersBlog.Services.Extensions
 {
@@ -22,7 +17,7 @@ namespace ProgrammersBlog.Services.Extensions
             {
                 x.UseSqlServer(Configuration.ConnectionString);
             });
-
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<ProgrammersBlogContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IArticleService, ArticleService>();
