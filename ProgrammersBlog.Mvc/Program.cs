@@ -13,6 +13,7 @@ builder.Services.AddControllersWithViews()
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 });
+builder.Services.AddSession();
 builder.Services.LoadMyServices();
 builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
 builder.Services.AddValidatorsFromAssembly(typeof(CategoryAddDtoValidator).Assembly)
@@ -27,8 +28,9 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapAreaControllerRoute(
     name:"Admin",
