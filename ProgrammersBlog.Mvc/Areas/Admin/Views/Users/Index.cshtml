@@ -1,0 +1,81 @@
+﻿@using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes
+@model ProgrammersBlog.Entities.Dtos.UserListDto
+@{
+    ViewBag.Title = "Kullanıcılar";
+    Layout = "_Layout";
+}
+
+@if (Model.ResultStatus == ResultStatus.Success)
+{
+    <div id="modalPlaceHolder" aria-hidden="true">
+    </div>
+
+    <div class="card mb-4 mt-1">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Kullanıcılar
+        </div>
+        <div class="card-body">
+            <div class="spinner-border" role="status" style="display:none;">
+                <span class="sr-only">Yükleniyor...</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>Eposta Adresi</th>
+                            <th>Telefon</th>
+                            <th>Profil Resmi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>Eposta Adresi</th>
+                            <th>Telefon</th>
+                            <th>Profil Resmi</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr name="@user.Id">
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.PhoneNumber</td>
+                                <td>@user.Picture</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm btn-update" data-id="@user.Id">
+                                        <span class="fas fa-edit"></span>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm btn-delete" data-id="@user.Id">
+                                        <span class="fas fa-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.ResultStatus == ResultStatus.Error)
+{
+    <div class="alert alert-danger mt-2">
+        <span>@Model.Message</span> <br />
+        Dashboard Sayfasına Geri Dönmek İçin Lütfen <a class="alert-link" asp-area="Admin" asp-controller="Home" asp-action="Index">Tıklayınız.</a>
+    </div>
+}
+
+
+@section Scripts{
+    <script src="~/js/usersindex.js" type="application/ecmascript"></script>
+}
+
