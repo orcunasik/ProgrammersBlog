@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using ProgrammersBlog.Mvc.AutoMapper.Profiles;
 using ProgrammersBlog.Services.AutoMapper.Profiles;
 using ProgrammersBlog.Services.Extensions;
 using ProgrammersBlog.Services.Validations;
@@ -15,7 +16,7 @@ builder.Services.AddControllersWithViews()
                 });
 builder.Services.AddSession();
 builder.Services.LoadMyServices();
-builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile));
+builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile));
 builder.Services.AddValidatorsFromAssembly(typeof(CategoryAddDtoValidator).Assembly)
                 .AddFluentValidationAutoValidation();
 
