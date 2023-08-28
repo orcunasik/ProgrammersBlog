@@ -10,6 +10,7 @@ namespace ProgrammersBlog.Entities.Dtos
         public string Password { get; set; }
         public string PhoneNumber { get; set; }
         [DataType(DataType.Upload)]
-        public IFormFile Picture { get; set; }
+        public IFormFile PictureFile { get; set; }
+        public string Picture { get; set; }
     }
 }
