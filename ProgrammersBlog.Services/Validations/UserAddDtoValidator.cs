@@ -31,8 +31,8 @@ namespace ProgrammersBlog.Services.Validations
             RuleFor(u => u.PhoneNumber).MaximumLength(13).WithName("Telefon No").WithMessage("{PropertyName} 13 Karakterden Fazla Olmamalıdır!");
             RuleFor(u => u.PhoneNumber).MinimumLength(13).WithName("Telefon No").WithMessage("{PropertyName} 13 Karakterden Az Olmamalıdır!");
 
-            RuleFor(u => u.Picture).NotNull().WithName("Profil Resmi").WithMessage("{PropertyName} Alanı Gereklidir!");
-            RuleFor(u => u.Picture).NotEmpty().WithName("Profil Resmi").WithMessage("Lütfen Bir {PropertyName} Seçiniz!");
+            RuleFor(u => u.PictureFile).NotNull().WithName("Profil Resmi").WithMessage("{PropertyName} Alanı Gereklidir!");
+            RuleFor(u => u.PictureFile).NotEmpty().WithName("Profil Resmi").WithMessage("Lütfen Bir {PropertyName} Seçiniz!");
 
 
         }
