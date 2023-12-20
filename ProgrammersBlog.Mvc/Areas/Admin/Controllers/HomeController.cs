@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
+namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Authorize(Roles = "Admin,Editor")]
+public class HomeController : Controller
 {
-    [Area("Admin")]
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }
