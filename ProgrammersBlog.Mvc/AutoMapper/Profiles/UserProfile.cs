@@ -2,13 +2,13 @@
 using ProgrammersBlog.Entities.Concrete;
 using ProgrammersBlog.Entities.Dtos;
 
-namespace ProgrammersBlog.Mvc.AutoMapper.Profiles
+namespace ProgrammersBlog.Mvc.AutoMapper.Profiles;
+
+public class UserProfile : Profile
 {
-    public class UserProfile : Profile
+    public UserProfile()
     {
-        public UserProfile()
-        {
-            CreateMap<UserAddDto, User>();
-        }
+        CreateMap<UserAddDto, User>();
+        CreateMap<User, UserUpdateDto>().ReverseMap();
     }
 }
