@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ProgrammersBlog.Entities.Concrete;
 using ProgrammersBlog.Entities.Dtos;
 using ProgrammersBlog.Mvc.Areas.Admin.Models;
+using ProgrammersBlog.Mvc.Helpers.Abstracts;
 using ProgrammersBlog.Shared.Utilities.Extensions;
 using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using System.Text.Json;
@@ -18,15 +19,17 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IImageHelper _imageHelper;
         private readonly IWebHostEnvironment _env;
         private readonly IMapper _mapper;
 
-        public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper, SignInManager<User> signInManager)
+        public UserController(UserManager<User> userManager, IWebHostEnvironment env, IMapper mapper, SignInManager<User> signInManager, IImageHelper imageHelper)
         {
             _userManager = userManager;
             _env = env;
             _mapper = mapper;
             _signInManager = signInManager;
+            _imageHelper = imageHelper;
         }
 
         [Authorize(Roles = "Admin")]
@@ -112,7 +115,10 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                userAddDto.Picture = await ImageUploadAsync(userAddDto.UserName, userAddDto.PictureFile);
+                var uploadedImageDtoResult = await _imageHelper.UploadUserImageAsync(userAddDto.UserName, userAddDto.PictureFile);
+                userAddDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success 
+                    ? uploadedImageDtoResult.Data.FullName
+                    : "userImages/defaultUser.png";
                 var user = _mapper.Map<User>(userAddDto);
                 var result = await _userManager.CreateAsync(user, userAddDto.Password);
                 if (result.Succeeded)
@@ -210,8 +216,14 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 
                 if(userUpdateDto.PictureFile is not null)
                 {
-                    userUpdateDto.Picture = await ImageUploadAsync(userUpdateDto.UserName, userUpdateDto.PictureFile);
-                    isNewPictureUploaded = true;
+                    var uploadedImageDtoResult = await _imageHelper.UploadUserImageAsync(userUpdateDto.UserName, userUpdateDto.PictureFile);
+                    userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success
+                        ? uploadedImageDtoResult.Data.FullName
+                        : "userImages/defaultUser.png";
+                    if (oldUserPicture != "userImages/defaultUser.png")
+                    {
+                        isNewPictureUploaded = true;
+                    }
                 }
                 User updatedUser = _mapper.Map(userUpdateDto, oldUser);
                 IdentityResult result = await _userManager.UpdateAsync(updatedUser);
@@ -219,7 +231,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 {
                     if (isNewPictureUploaded)
                     {
-                        ImageDelete(oldUserPicture);
+                        _imageHelper.Delete(oldUserPicture);
                     }
                     string userUpdateViewModel = JsonSerializer.Serialize(new UserUpdateAjaxViewModel
                     {
@@ -279,8 +291,11 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
 
                 if (userUpdateDto.PictureFile is not null)
                 {
-                    userUpdateDto.Picture = await ImageUploadAsync(userUpdateDto.UserName, userUpdateDto.PictureFile);
-                    if(oldUserPicture != "defaultUser.png")
+                    var uploadedImageDtoResult = await _imageHelper.UploadUserImageAsync(userUpdateDto.UserName, userUpdateDto.PictureFile);
+                    userUpdateDto.Picture = uploadedImageDtoResult.ResultStatus == ResultStatus.Success
+                        ? uploadedImageDtoResult.Data.FullName
+                        : "userImages/defaultUser.png";
+                    if (oldUserPicture != "userImages/defaultUser.png")
                     {
                         isNewPictureUploaded = true;
                     }
@@ -291,7 +306,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                 {
                     if (isNewPictureUploaded)
                     {
-                        ImageDelete(oldUserPicture);
+                        _imageHelper.Delete(oldUserPicture);
                     }
                     TempData.Add("SuccessMessage", $"{updatedUser.UserName} adlı kullanıcı başarıyla güncellenmiştir");
                     return View(userUpdateDto);
@@ -337,6 +352,14 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
                         TempData.Add("SuccessMessage", $"Şifreniz Başarıyla Değiştirilmiştir.");
                         return View();
                     }
+                    else
+                    {
+                        foreach (IdentityError error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                        return View(userPasswordChangeDto);
+                    }
                 }
                 else
                 {
@@ -346,36 +369,7 @@ namespace ProgrammersBlog.Mvc.Areas.Admin.Controllers
             }
             else
                 return View(userPasswordChangeDto);
-            return View();
         }
 
-        [Authorize(Roles = "Admin,Editor")]
-        public async Task<string> ImageUploadAsync(string userName, IFormFile pictureFile)
-        {
-            string wwwroot = _env.WebRootPath;
-            string fileExtension = Path.GetExtension(pictureFile.FileName);
-            DateTime dateTime = DateTime.Now;
-            string fileName = $"{userName}_{dateTime.FullDateAndTimeStringWithUnderscore()}{fileExtension}";
-            var path = Path.Combine($"{wwwroot}/img", fileName);
-            await using(var stream = new FileStream(path, FileMode.Create))
-            {
-                await pictureFile.CopyToAsync(stream);
-            }
-            return fileName;
-        }
-
-        [Authorize(Roles = "Admin,Editor")]
-        public bool ImageDelete(string pictureName)
-        {
-            string wwwroot = _env.WebRootPath;
-            string fileToDelete = Path.Combine($"{wwwroot}/img", pictureName);
-            if (System.IO.File.Exists(fileToDelete))
-            {
-                System.IO.File.Delete(fileToDelete);
-                return true;
-            }
-            else
-                return false;
-        }
     }
 }

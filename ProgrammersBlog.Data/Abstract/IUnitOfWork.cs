@@ -1,10 +1,9 @@
-﻿namespace ProgrammersBlog.Data.Abstract
+﻿namespace ProgrammersBlog.Data.Abstract;
+
+public interface IUnitOfWork : IAsyncDisposable
 {
-    public interface IUnitOfWork : IAsyncDisposable
-    {
-        IArticleRepository Articles { get; }
-        ICategoryRepository Categories { get; }
-        ICommentRepository Comments { get; }
-        Task<int> SaveAsync();
-    }
+    IArticleRepository Articles { get; }
+    ICategoryRepository Categories { get; }
+    ICommentRepository Comments { get; }
+    Task<int> SaveAsync();
 }

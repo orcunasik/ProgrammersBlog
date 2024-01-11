@@ -24,7 +24,7 @@ public class CategoriesController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var result = await _categoryService.GetAllByNonDeleted();
+        var result = await _categoryService.GetAllByNonDeletedAsync();
         return View(result.Data);
     }
 
@@ -39,7 +39,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _categoryService.Add(categoryAddDto, "Orçun Aşık");
+            var result = await _categoryService.AddAsync(categoryAddDto, "Orçun Aşık");
             if(result.ResultStatus is ResultStatus.Success)
             {
                 var categoryAddAjaxModel = JsonSerializer.Serialize(new CategoryAddAjaxViewModel
@@ -60,7 +60,7 @@ public class CategoriesController : Controller
     [HttpGet]
     public async Task<IActionResult> Update(int categoryId)
     {
-        var result = await _categoryService.GetCategoryUpdateDto(categoryId);
+        var result = await _categoryService.GetCategoryUpdateDtoAsync(categoryId);
         if (result.ResultStatus == ResultStatus.Success)
             return PartialView("_CategoryUpdatePartial", result.Data);
         else
@@ -72,7 +72,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            var result = await _categoryService.Update(categoryUpdateDto, "Orçun Aşık");
+            var result = await _categoryService.UpdateAsync(categoryUpdateDto, "Orçun Aşık");
             if (result.ResultStatus is ResultStatus.Success)
             {
                 string categoryUpdateAjaxModel = JsonSerializer.Serialize(new CategoryUpdateAjaxViewModel
@@ -92,7 +92,7 @@ public class CategoriesController : Controller
 
     public async Task<JsonResult> GetAllCategories()
     {
-        var result = await _categoryService.GetAllByNonDeleted();
+        var result = await _categoryService.GetAllByNonDeletedAsync();
         string categories = JsonSerializer.Serialize(result.Data, new JsonSerializerOptions
         {
             ReferenceHandler = ReferenceHandler.Preserve
@@ -103,7 +103,7 @@ public class CategoriesController : Controller
     [HttpPost]
     public async Task<JsonResult> Delete(int categoryId)
     {
-        var result = await _categoryService.Delete(categoryId, "Orçun Aşık");
+        var result = await _categoryService.DeleteAsync(categoryId, "Orçun Aşık");
         string deletedCategory = JsonSerializer.Serialize(result.Data);
         return Json(deletedCategory);
     }

@@ -1,10 +1,9 @@
 ﻿using ProgrammersBlog.Entities.Concrete;
 using ProgrammersBlog.Shared.Entities.Abstract;
 
-namespace ProgrammersBlog.Entities.Dtos
+namespace ProgrammersBlog.Entities.Dtos;
+
+public class UserListDto : DtoGetBase
 {
-    public class UserListDto : DtoGetBase
-    {
-        public IList<User> Users { get; set; }
-    }
+    public IList<User> Users { get; set; }
 }

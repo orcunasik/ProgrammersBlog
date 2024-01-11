@@ -1,19 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProgrammersBlog.Data.Abstract;
+using ProgrammersBlog.Data.Concrete.EntityFramework.Contexts;
 using ProgrammersBlog.Entities.Concrete;
 using ProgrammersBlog.Shared.Data.Concrete.EntityFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProgrammersBlog.Data.Concrete.EntityFramework.Repositories
+namespace ProgrammersBlog.Data.Concrete.EntityFramework.Repositories;
+
+public class EfCategoryRepository : EfEntityRepositoryBase<Category>, ICategoryRepository
 {
-    public class EfCategoryRepository : EfEntityRepositoryBase<Category>, ICategoryRepository
+    private ProgrammersBlogContext ProgrammersBlogContext
     {
-        public EfCategoryRepository(DbContext context) : base(context)
+        get
         {
+            return _context as ProgrammersBlogContext;
         }
+    }
+    public EfCategoryRepository(DbContext context) : base(context)
+    {
+    }
+
+    public async Task<Category> GetByIdAsync(int categoryId)
+    {
+        return await ProgrammersBlogContext.Categories.SingleOrDefaultAsync(c => c.Id == categoryId);
     }
 }

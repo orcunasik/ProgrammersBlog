@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ProgrammersBlog.Entities.Concrete
+namespace ProgrammersBlog.Entities.Concrete;
+
+public class UserClaim : IdentityUserClaim<int>
 {
-    public class UserClaim : IdentityUserClaim<int>
-    {
-    }
 }

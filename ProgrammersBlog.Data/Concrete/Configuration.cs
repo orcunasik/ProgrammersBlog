@@ -1,23 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ProgrammersBlog.Data.Concrete
+namespace ProgrammersBlog.Data.Concrete;
+
+public static class Configuration
 {
-    public static class Configuration
+    static public string ConnectionString 
     {
-        static public string ConnectionString 
+        get
         {
-            get
-            {
-                ConfigurationManager configurationManager = new();
-                configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),"../ProgrammersBlog.Mvc"));
-                configurationManager.AddJsonFile("appsettings.json");
-                return configurationManager.GetConnectionString("SqlConnection");
-            }
+            ConfigurationManager configurationManager = new();
+            configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(),"../ProgrammersBlog.Mvc"));
+            configurationManager.AddJsonFile("appsettings.json");
+            return configurationManager.GetConnectionString("SqlConnection");
         }
     }
 }
