@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\nginit\source\repos\ProgrammersBlog\ProgrammersBlog.Services\ProgrammersBlog.Services.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\orcun\source\repos\ProgrammersBlog\ProgrammersBlog.Services\ProgrammersBlog.Services.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
