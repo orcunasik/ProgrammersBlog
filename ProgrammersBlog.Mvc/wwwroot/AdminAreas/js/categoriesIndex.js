@@ -367,7 +367,7 @@
                         const isValid = newFormBody.find('[name="IsValid"]').val() === 'True';
                         if (isValid) {
                             placeHolderDiv.find('.modal').modal('hide');
-                            dataTable.row(tableRow).data([
+                            const newTableRow = dataTable.row.add([
                                 categoryAddAjaxModel.CategoryDto.Category.Id,
                                 categoryAddAjaxModel.CategoryDto.Category.Name,
                                 categoryAddAjaxModel.CategoryDto.Category.Description,

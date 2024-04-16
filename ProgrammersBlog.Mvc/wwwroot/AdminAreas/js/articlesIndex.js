@@ -1,4 +1,4 @@
-﻿jQuery(function ($) {
+﻿$(document).ready(function () {
 
     /* DataTables start here */
 
@@ -33,36 +33,53 @@
                             $('.spinner-border').show();
                         },
                         success: function (data) {
-                            const articleListDto = json.Parse(data);
+                            const articleResult = jQuery.parseJSON(data);
                             dataTable.clear();
-                            console.log(articleListDto);
-                            if (articleListDto.ResultStatus === 0) {
-                                $.each(articleListDto.Articles.$values,
+                            console.log(articleResult);
+                            if (articleResult.Data.ResultStatus === 0) {
+                                let categoriesArray = [];
+                                $.each(articleResult.Data.Articles.$values,
                                     function (index, article) {
+                                        const newArticle = getJsonNetObject(article, articleResult.Data.Articles.$values);
+                                        let newCategory = getJsonNetObject(newArticle.Category, newArticle);
+                                        if (newCategory !== null) {
+                                            categoriesArray.push(newCategory);
+                                        }
+                                        if (newCategory === null) {
+                                            newCategory = categoriesArray.find((category) => {
+                                                return category.$id === newArticle.Category.$ref;
+                                            });
+                                        }
+                                        console.log(newArticle);
+                                        console.log(newCategory);
                                         const newTableRow = dataTable.row.add([
-                                            article.Id,
-                                            article.Title,
-                                            article.Content,
-                                            article.CategoryId,
-                                            `<img src="/img/${article.Thumbnail}" alt="${article.Title}" class="my-image-table" />`,
+                                            newArticle.Id,
+                                            newCategory.Name,
+                                            newArticle.Title,
+                                            `<img src="/img/${newArticle.Thumbnail}" alt="${newArticle.Title}" class="my-image-table" />`,
+                                            `${convertToShortDate(newArticle.Date)}`,
+                                            newArticle.ViewsCount,
+                                            newArticle.CommentCount,
+                                            `${newArticle.IsActive ? "Evet" : "Hayır"}`,
+                                            `${newArticle.IsDeleted ? "Evet" : "Hayır"}`,
+                                            `${convertToShortDate(newArticle.CreatedDate)}`,
+                                            newArticle.CreatedByName,
+                                            `${convertToShortDate(newArticle.ModifiedDate)}`,
+                                            newArticle.ModifiedByName,
                                             `
-                                                <button class="btn btn-primary btn-sm btn-update" data-id="${article.Id}">
-                                                    <span class="fas fa-edit"></span>
-                                                </button>
-                                                <button class="btn btn-danger btn-sm btn-delete" data-id="${article.Id}">
-                                                    <span class="fas fa-trash"></span>
-                                                </button>
+                                            <button class="btn btn-primary btn-sm btn-update" data-id="${newArticle.Id}"><span class="fas fa-edit"></span></button>
+                                            <button class="btn btn-danger btn-sm btn-delete" data-id="${newArticle.Id}"><span class="fas fa-minus-circle"></span></button>
                                             `
                                         ]).node();
                                         const jqueryTableRow = $(newTableRow);
-                                        jqueryTableRow.attr("name", `${article.Id}`);
+                                        jqueryTableRow.attr("name", `${newArticle.Id}`);
                                     });
                                 dataTable.draw();
                                 $('.spinner-border').hide();
                                 $('#articlesTable').fadeIn(1400);
                             }
                             else {
-                                toastr.error(`${articleListDto.Message}`, 'İşlem Başarısız!');
+                                toastr.error(`${articleResult.Data.Message}`, 'İşlem Başarısız!');
                             }
                         },
                         error: function (err) {
@@ -332,10 +349,10 @@
             event.preventDefault();
             const id = $(this).attr('data-id');
             const tableRow = $(`[name="${id}"]`);
-            const articleTitle = tableRow.find('td:eq(1)').text();
+            const articleTitle = tableRow.find('td:eq(2)').text();
             Swal.fire({
                 title: 'Silmek istediğinize emin misiniz?',
-                text: `${articleTitle} adlı makale silinecektir!`,
+                text: `${articleTitle} başlıklı makale silinecektir!`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -351,11 +368,11 @@
                         data: { articleId: id },
                         url: '/Admin/Articles/Delete/',
                         success: function (data) {
-                            const articleDto = json.Parse(data);
-                            if (articleDto.ResultStatus === 0) {
+                            const articleResult = jQuery.parseJSON(data);
+                            if (articleResult.ResultStatus === 0) {
                                 Swal.fire(
                                     'Silindi!',
-                                    `${articleDto.article.Title} adlı makale başarıyla silinmiştir.`,
+                                    `${articleResult.Message}`,
                                     'success'
                                 );
                                 dataTable.row(tableRow).remove().draw();
@@ -364,7 +381,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'İşlem Başarısız!',
-                                    text: `${articleDto.Message}`
+                                    text: `${articleResult.Message}`
                                 });
                             }
                         },

@@ -15,11 +15,12 @@ builder.Services.AddControllersWithViews()
                 {
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                });
+                })
+                .AddNToastNotifyToastr();
 builder.Services.AddSession();
 builder.Services.LoadMyServices();
 builder.Services.AddScoped<IImageHelper, ImageHelper>();
-builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(CategoryProfile),typeof(ArticleProfile),typeof(UserProfile), typeof(ViewModelsProfile));
 builder.Services.AddValidatorsFromAssembly(typeof(CategoryAddDtoValidator).Assembly)
                 .AddFluentValidationAutoValidation();
 
@@ -52,6 +53,7 @@ app.UseSession();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseNToastNotify();
 app.MapAreaControllerRoute(
     name:"Admin",
     areaName:"Admin",

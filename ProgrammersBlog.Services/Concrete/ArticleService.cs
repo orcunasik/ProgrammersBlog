@@ -7,9 +7,10 @@ using ProgrammersBlog.Services.Utilies;
 using ProgrammersBlog.Shared.Utilities.Results.Abstract;
 using ProgrammersBlog.Shared.Utilities.Results.ComplexTypes;
 using ProgrammersBlog.Shared.Utilities.Results.Concrete;
+using static ProgrammersBlog.Services.Utilies.Messages;
+using Article = ProgrammersBlog.Entities.Concrete.Article;
 
 namespace ProgrammersBlog.Services.Concrete;
-
 public class ArticleService : IArticleService
 {
     private readonly IUnitOfWork _unitOfWork;
@@ -20,12 +21,12 @@ public class ArticleService : IArticleService
         _mapper = mapper;
     }
 
-    public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName)
+    public async Task<IResult> AddAsync(ArticleAddDto articleAddDto, string createdByName, int userId)
     {
         Article article = _mapper.Map<Article>(articleAddDto);
         article.CreatedByName = createdByName;
         article.ModifiedByName = createdByName;
-        article.UserId = 1;
+        article.UserId = userId;
         await _unitOfWork.Articles.AddAsync(article);
         await _unitOfWork.SaveAsync();
         return new Result(ResultStatus.Success, Messages.Article.Add(article.Title));
@@ -155,10 +156,26 @@ public class ArticleService : IArticleService
 
     public async Task<IResult> UpdateAsync(ArticleUpdateDto articleUpdateDto, string modifiedByName)
     {
-        Article article = _mapper.Map<Article>(articleUpdateDto);
+        Article oldArticle = await _unitOfWork.Articles.GetAsync(a => a.Id == articleUpdateDto.Id);
+        Article article = _mapper.Map(articleUpdateDto, oldArticle);
         article.ModifiedByName = modifiedByName;
         await _unitOfWork.Articles.UpdateAsync(article);
         await _unitOfWork.SaveAsync();
         return new Result(ResultStatus.Success, Messages.Article.Update(article.Title));
+    }
+
+    public async Task<IDataResult<ArticleUpdateDto>> GetArticleUpdateDtoAsync(int articleId)
+    {
+        bool result = await _unitOfWork.Articles.AnyAsync(a => a.Id == articleId);
+        if (result)
+        {
+            Article article = await _unitOfWork.Articles.GetAsync(a => a.Id == articleId);
+            ArticleUpdateDto articleUpdateDto = _mapper.Map<ArticleUpdateDto>(article);
+            return new DataResult<ArticleUpdateDto>(ResultStatus.Success, articleUpdateDto);
+        }
+        else
+        {
+            return new DataResult<ArticleUpdateDto>(ResultStatus.Error, Messages.Article.NotFound(isPlural: false), null);
+        }
     }
 }

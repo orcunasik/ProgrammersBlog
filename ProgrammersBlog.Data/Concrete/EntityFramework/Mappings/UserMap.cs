@@ -38,7 +38,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             Email = "adminuser@gmail.com",
             NormalizedEmail = "ADMINUSER@GMAIL.COM",
             PhoneNumber = "+905555555555",
-            Picture = "defaultUser.png",
+            Picture = "userImages/defaultUser.png",
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             SecurityStamp = Guid.NewGuid().ToString()
@@ -53,7 +53,7 @@ public class UserMap : IEntityTypeConfiguration<User>
             Email = "editoruser@gmail.com",
             NormalizedEmail = "EDITORUSER@GMAIL.COM",
             PhoneNumber = "+905555555555",
-            Picture = "defaultUser.png",
+            Picture = "userImages/defaultUser.png",
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             SecurityStamp = Guid.NewGuid().ToString()

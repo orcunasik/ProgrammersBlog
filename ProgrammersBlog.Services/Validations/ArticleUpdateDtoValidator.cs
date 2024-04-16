@@ -62,6 +62,8 @@ namespace ProgrammersBlog.Services.Validations
 
             RuleFor(x => x.IsDeleted).NotNull().WithName("Silindi Mi?").WithMessage("{PropertyName} Alanı Gereklidir!");
             RuleFor(x => x.IsDeleted).NotEmpty().WithName("Silindi Mi?").WithMessage("{PropertyName} Boş Geçilmemelidir!");
+
+            RuleFor(x => x.UserId).NotNull().WithName("Kullanıcı Adı").WithMessage("{PropertyName} Alanı Gereklidir!");
         }
     }
 }
